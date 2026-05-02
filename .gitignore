@@ -1,0 +1,14 @@
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Local resources and archives
+resources/
+*.zip
+*.pdf
+
+# Project outputs
+smart-poster-webar-showcase/node_modules/
+smart-poster-webar-showcase/dist/
+smart-poster-webar-showcase/.vite/
