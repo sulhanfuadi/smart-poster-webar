@@ -1,0 +1,33 @@
+<svg width="1080" height="1528" viewBox="0 0 1080 1528" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1080" height="1528" fill="#0F172A"/>
+  <rect x="72" y="72" width="936" height="1384" rx="40" fill="#020617" stroke="#38BDF8" stroke-opacity="0.34" stroke-width="4" stroke-dasharray="14 14"/>
+  <text x="108" y="170" fill="#E0F2FE" font-family="Arial, sans-serif" font-size="52" font-weight="700">Guide Penempatan Marker Final</text>
+  <text x="108" y="234" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="28">Tempatkan marker di kanan bawah poster, jaga margin aman, dan hindari area yang padat teks atau refleksi.</text>
+  <rect x="120" y="324" width="380" height="348" rx="30" fill="#031626" stroke="#7DD3FC" stroke-opacity="0.24"/>
+  <text x="154" y="390" fill="#E0F2FE" font-family="Arial, sans-serif" font-size="30" font-weight="700">Do</text>
+  <text x="154" y="448" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="26">• Gunakan cetak tajam hitam-putih</text>
+  <text x="154" y="494" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="26">• Sisakan ruang kosong di sekeliling marker</text>
+  <text x="154" y="540" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="26">• Pastikan marker rata dan tidak melengkung</text>
+  <text x="154" y="586" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="26">• Uji dari jarak 20–35 cm lebih dulu</text>
+  <rect x="540" y="324" width="418" height="348" rx="30" fill="#2A0B12" stroke="#FCA5A5" stroke-opacity="0.24"/>
+  <text x="574" y="390" fill="#FEE2E2" font-family="Arial, sans-serif" font-size="30" font-weight="700">Avoid</text>
+  <text x="574" y="448" fill="#FECACA" font-family="Arial, sans-serif" font-size="26">• Marker tertutup logo atau CTA</text>
+  <text x="574" y="494" fill="#FECACA" font-family="Arial, sans-serif" font-size="26">• Permukaan glossy dengan glare tinggi</text>
+  <text x="574" y="540" fill="#FECACA" font-family="Arial, sans-serif" font-size="26">• Marker terlalu kecil atau blur saat cetak</text>
+  <text x="574" y="586" fill="#FECACA" font-family="Arial, sans-serif" font-size="26">• Distorsi perspektif berlebih saat scan</text>
+  <rect x="682" y="1040" width="278" height="278" rx="28" fill="#F8FAFC" stroke="#7DD3FC" stroke-width="6"/>
+  <rect x="718" y="1076" width="206" height="206" rx="18" fill="#111827"/>
+  <rect x="754" y="1112" width="134" height="134" fill="#F8FAFC"/>
+  <path d="M754 1112H821V1179H754V1112Z" fill="#111827"/>
+  <path d="M821 1179H888V1246H821V1179Z" fill="#111827"/>
+  <line x1="418" y1="840" x2="822" y2="1040" stroke="#38BDF8" stroke-width="5" stroke-dasharray="14 14"/>
+  <circle cx="418" cy="840" r="14" fill="#38BDF8"/>
+  <text x="120" y="818" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="30" font-weight="700">Area rekomendasi marker</text>
+  <text x="120" y="868" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="27">Letakkan marker di kanan bawah untuk menjaga hero text dan visual smartphone tetap bersih.</text>
+  <rect x="118" y="952" width="456" height="230" rx="28" fill="#031626" stroke="#7DD3FC" stroke-opacity="0.24"/>
+  <text x="150" y="1016" fill="#E0F2FE" font-family="Arial, sans-serif" font-size="28" font-weight="700">Checklist operator print/demo</text>
+  <text x="150" y="1064" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="24">1. Cek contrast marker setelah dicetak</text>
+  <text x="150" y="1100" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="24">2. Cek glare di ruangan demo</text>
+  <text x="150" y="1136" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="24">3. Uji lock marker di Chrome Android dan Safari iPhone</text>
+  <text x="150" y="1172" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="24">4. Siapkan Hiro fallback untuk troubleshooting cepat</text>
+</svg>

@@ -1,9 +1,0 @@
-<svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1080" height="1080" fill="#F8FAFC"/>
-  <rect x="90" y="90" width="900" height="900" fill="black"/>
-  <rect x="210" y="210" width="660" height="660" fill="white"/>
-  <circle cx="540" cy="540" r="190" fill="#111827"/>
-  <rect x="508" y="315" width="64" height="450" fill="#38BDF8"/>
-  <rect x="315" y="508" width="450" height="64" fill="#38BDF8"/>
-  <text x="540" y="1015" text-anchor="middle" fill="#111827" font-family="Arial, sans-serif" font-size="42">Custom marker visual placeholder</text>
-</svg>

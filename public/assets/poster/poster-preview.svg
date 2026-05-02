@@ -1,0 +1,50 @@
+<svg width="1080" height="1528" viewBox="0 0 1080 1528" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1080" height="1528" fill="#020617"/>
+  <rect x="52" y="52" width="976" height="1424" rx="44" fill="url(#bg)"/>
+  <rect x="52" y="52" width="976" height="1424" rx="44" stroke="#7DD3FC" stroke-opacity="0.28" stroke-width="4"/>
+  <text x="104" y="162" fill="#7DD3FC" font-family="Arial, sans-serif" font-size="32" letter-spacing="8">SMART POSTER + STATIC WEBAR</text>
+  <text x="104" y="248" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="86" font-weight="700">Nova X Vision 5G</text>
+  <text x="104" y="316" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="30">Visual smartphone yang tadinya statis berubah jadi AR interaktif langsung dari browser.</text>
+  <rect x="104" y="384" width="430" height="760" rx="56" fill="#0F172A" stroke="#38BDF8" stroke-opacity="0.4" stroke-width="4"/>
+  <rect x="132" y="420" width="374" height="684" rx="40" fill="url(#screen)"/>
+  <circle cx="226" cy="496" r="30" fill="#E2E8F0" fill-opacity="0.96"/>
+  <circle cx="298" cy="496" r="30" fill="#BFDBFE" fill-opacity="0.96"/>
+  <circle cx="370" cy="496" r="30" fill="#E2E8F0" fill-opacity="0.96"/>
+  <rect x="156" y="938" width="326" height="98" rx="28" fill="#031626" fill-opacity="0.7" stroke="#7DD3FC" stroke-opacity="0.32"/>
+  <text x="182" y="984" fill="#E0F2FE" font-family="Arial, sans-serif" font-size="24" font-weight="700">Scan marker di kanan bawah</text>
+  <text x="182" y="1018" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="20">Objek AR muncul + hotspot + chatbot</text>
+  <text x="590" y="440" fill="#E0F2FE" font-family="Arial, sans-serif" font-size="46" font-weight="700">Kenapa menarik?</text>
+  <text x="590" y="520" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="30">• 200MP AI camera untuk konten detail</text>
+  <text x="590" y="584" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="30">• AMOLED 144Hz untuk visual mulus</text>
+  <text x="590" y="648" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="30">• 5G flagship + RAM besar</text>
+  <text x="590" y="712" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="30">• Fast charge untuk mobilitas tinggi</text>
+  <rect x="590" y="786" width="356" height="92" rx="28" fill="url(#cta)"/>
+  <text x="654" y="842" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="30" font-weight="700">Explore in AR</text>
+  <rect x="590" y="934" width="356" height="154" rx="28" fill="#031626" fill-opacity="0.72" stroke="#7DD3FC" stroke-opacity="0.28"/>
+  <text x="620" y="984" fill="#E0F2FE" font-family="Arial, sans-serif" font-size="28" font-weight="700">Instant conversion flow</text>
+  <text x="620" y="1032" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="24">1. Scan marker</text>
+  <text x="620" y="1068" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="24">2. Lihat fitur AR</text>
+  <text x="620" y="1104" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="24">3. Tanya chatbot</text>
+  <text x="620" y="1140" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="24">4. Tap CTA pembelian</text>
+  <rect x="714" y="1166" width="248" height="248" rx="28" fill="#F8FAFC"/>
+  <rect x="744" y="1196" width="188" height="188" rx="18" fill="#111827"/>
+  <rect x="778" y="1230" width="120" height="120" fill="#F8FAFC"/>
+  <path d="M778 1230H838V1290H778V1230Z" fill="#111827"/>
+  <path d="M838 1290H898V1350H838V1290Z" fill="#111827"/>
+  <text x="698" y="1452" fill="#94A3B8" font-family="Arial, sans-serif" font-size="24">Marker area untuk scan AR</text>
+  <defs>
+    <linearGradient id="bg" x1="52" y1="52" x2="1028" y2="1476" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#08111F"/>
+      <stop offset="1" stop-color="#172554"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="132" y1="420" x2="506" y2="1104" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38BDF8"/>
+      <stop offset="0.55" stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="cta" x1="590" y1="786" x2="946" y2="878" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0EA5E9"/>
+      <stop offset="1" stop-color="#2563EB"/>
+    </linearGradient>
+  </defs>
+</svg>
