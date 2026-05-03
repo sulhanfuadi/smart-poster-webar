@@ -14,6 +14,15 @@ interface UseMindArOptions {
 
 const MINDAR_SCRIPT = 'https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js';
 
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number, label: string) {
+  return Promise.race<T>([
+    promise,
+    new Promise<T>((_, reject) => {
+      window.setTimeout(() => reject(new Error(`${label} timed out`)), timeoutMs);
+    }),
+  ]);
+}
+
 function loadMindARScript() {
   if (window.MINDAR?.IMAGE?.MindARThree) {
     return Promise.resolve();
@@ -59,6 +68,7 @@ export function useMindArRuntime({
     const boot = async () => {
       setIsBooting(true);
       onStage('requesting_camera');
+      let permissionGranted = false;
 
       const buildRuntime = (targetSrc: string) => {
         if (!containerRef.current || !window.MINDAR?.IMAGE?.MindARThree) {
@@ -107,13 +117,27 @@ export function useMindArRuntime({
       };
 
       try {
-        await loadMindARScript();
+        if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) {
+          throw new Error('Browser does not support secure camera runtime');
+        }
+
+        const permissionStream = await withTimeout(
+          navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false }),
+          10000,
+          'Camera permission request',
+        );
+        permissionGranted = true;
+        permissionStream.getTracks().forEach((track) => track.stop());
+        onCameraGranted(true);
+        onStage('ready');
+
+        await withTimeout(loadMindARScript(), 10000, 'MindAR script load');
         if (canceled || !containerRef.current || !window.MINDAR?.IMAGE?.MindARThree) return;
 
         let runtime = buildRuntime(imageTargetSrc);
 
         try {
-          await runtime.mindarThree.start();
+          await withTimeout(runtime.mindarThree.start(), 12000, 'MindAR start');
         } catch (primaryError) {
           runtime.mindarThree.stop();
           runtime.renderer.setAnimationLoop(null);
@@ -123,7 +147,7 @@ export function useMindArRuntime({
           }
 
           runtime = buildRuntime(fallbackImageTargetSrc);
-          await runtime.mindarThree.start();
+          await withTimeout(runtime.mindarThree.start(), 12000, 'MindAR fallback start');
         }
 
         if (canceled) {
@@ -149,7 +173,9 @@ export function useMindArRuntime({
           }
         };
       } catch {
-        onCameraGranted(false);
+        if (!permissionGranted) {
+          onCameraGranted(false);
+        }
         onStage('error');
       } finally {
         setIsBooting(false);
