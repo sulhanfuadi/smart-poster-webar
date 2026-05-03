@@ -7,3 +7,5 @@
 - If source marker images are changed, `target.mind` must be regenerated (`npm run markers:generate`).
 - If a product target URL/path is unreachable or invalid, runtime falls back to camera recovery flow.
 - Chatbot is intentionally excluded from v1 and planned for v1.1.
+
+- MacBook 3D model path is fixed to `public/assets/models/apple-macbook/model.glb` for v1 scope.

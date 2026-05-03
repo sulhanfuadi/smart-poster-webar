@@ -44,6 +44,11 @@ npm run markers:generate
 
 - Detailed template: `public/assets/markers/products/README.md`.
 
+## 3D model placement
+- MacBook product can render a real GLB model when this file exists:
+  - `public/assets/models/apple-macbook/model.glb`
+- If model load fails or file is missing, runtime keeps default fallback mesh (no crash).
+
 ## Run locally
 ```bash
 npm install

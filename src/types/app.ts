@@ -42,6 +42,13 @@ export interface ScanTargetConfig {
   referenceImageUrl: string;
 }
 
+export interface ProductArModelConfig {
+  url: string;
+  scale: [number, number, number];
+  position: [number, number, number];
+  rotation: [number, number, number];
+}
+
 export interface ProductHotspot {
   id: string;
   label: string;
@@ -87,6 +94,7 @@ export interface ProductConfig {
   scan: ProductScanCopy;
   afterScan: ProductAfterScanCopy;
   scanTarget: ScanTargetConfig;
+  arModel?: ProductArModelConfig;
   offerCTA: {
     url: string;
     label: string;

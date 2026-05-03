@@ -1,12 +1,24 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { RefObject } from 'react';
+import type { ProductArModelConfig } from '../types/app';
 
 type ThreeModule = typeof import('three');
+type GLTFLoaderModule = {
+  GLTFLoader: new () => {
+    load: (
+      url: string,
+      onLoad: (gltf: { scene?: import('three').Object3D; scenes?: import('three').Object3D[] }) => void,
+      onProgress?: (event: ProgressEvent<EventTarget>) => void,
+      onError?: (error: unknown) => void,
+    ) => void;
+  };
+};
 
 interface UseMindArOptions {
   containerRef: RefObject<HTMLDivElement | null>;
   imageTargetSrc: string;
   fallbackImageTargetSrc?: string;
+  productArModel?: ProductArModelConfig;
   onStage: (stage: 'requesting_camera' | 'ready' | 'searching' | 'found' | 'lost' | 'error') => void;
   onCameraGranted: (granted: boolean) => void;
   onMarkerLocked: (locked: boolean) => void;
@@ -17,6 +29,7 @@ interface UseMindArOptions {
 
 const MINDAR_MODULE_SPECIFIERS = ['mindar-image-three'];
 const THREE_MODULE_SPECIFIERS = ['three'];
+const GLTF_LOADER_SPECIFIERS = ['three/addons/loaders/GLTFLoader.js'];
 
 function withTimeout<T>(promise: Promise<T>, timeoutMs: number, label: string) {
   return Promise.race<T>([
@@ -87,6 +100,21 @@ async function loadThreeModule() {
   throw lastError instanceof Error ? lastError : new Error('Unable to load Three.js module');
 }
 
+async function loadGLTFLoaderModule() {
+  let lastError: unknown = null;
+
+  for (const moduleSpecifier of GLTF_LOADER_SPECIFIERS) {
+    try {
+      const moduleValue = await import(/* @vite-ignore */ moduleSpecifier);
+      return moduleValue as GLTFLoaderModule;
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error('Unable to load GLTFLoader module');
+}
+
 function enforceCameraFill(container: HTMLDivElement | null) {
   if (!container) return;
 
@@ -124,6 +152,7 @@ export function useMindArRuntime({
   containerRef,
   imageTargetSrc,
   fallbackImageTargetSrc,
+  productArModel,
   onStage,
   onCameraGranted,
   onMarkerLocked,
@@ -147,7 +176,12 @@ export function useMindArRuntime({
       onStage('requesting_camera');
       let permissionGranted = false;
 
-      const buildRuntime = (targetSrc: string, threeModule: ThreeModule) => {
+      const buildRuntime = (
+        targetSrc: string,
+        threeModule: ThreeModule,
+        gltfLoaderModule: GLTFLoaderModule | null,
+        arModel: ProductArModelConfig | undefined,
+      ) => {
         if (!containerRef.current || !window.MINDAR?.IMAGE?.MindARThree) {
           throw new Error('MindAR runtime unavailable');
         }
@@ -168,6 +202,8 @@ export function useMindArRuntime({
         scene.add(lightA, lightB);
 
         const anchor = mindarThree.addAnchor(0);
+
+        const fallbackGroup = new threeModule.Group();
         const body = new threeModule.Mesh(
           new threeModule.BoxGeometry(0.6, 1.1, 0.06),
           new threeModule.MeshStandardMaterial({ color: 0x1d1d1f, roughness: 0.3, metalness: 0.2 }),
@@ -177,8 +213,51 @@ export function useMindArRuntime({
           new threeModule.MeshStandardMaterial({ color: 0x9ec9f7, roughness: 0.45, metalness: 0.0 }),
         );
         screen.position.z = 0.035;
-        anchor.group.add(body);
-        anchor.group.add(screen);
+        fallbackGroup.add(body);
+        fallbackGroup.add(screen);
+        anchor.group.add(fallbackGroup);
+
+        if (arModel && gltfLoaderModule) {
+          const tryLoadModel = async () => {
+            try {
+              const loader = new gltfLoaderModule.GLTFLoader();
+              const loadedModel = await withTimeout(
+                new Promise<import('three').Object3D>((resolve, reject) => {
+                  loader.load(
+                    arModel.url,
+                    (gltf) => {
+                      const root = gltf.scene ?? gltf.scenes?.[0];
+                      if (!root) {
+                        reject(new Error('GLB scene root is missing'));
+                        return;
+                      }
+                      resolve(root);
+                    },
+                    undefined,
+                    (error) => reject(error),
+                  );
+                }),
+                8000,
+                'GLB model load',
+              );
+
+              if (canceled) {
+                return;
+              }
+
+              loadedModel.scale.set(arModel.scale[0], arModel.scale[1], arModel.scale[2]);
+              loadedModel.position.set(arModel.position[0], arModel.position[1], arModel.position[2]);
+              loadedModel.rotation.set(arModel.rotation[0], arModel.rotation[1], arModel.rotation[2]);
+
+              anchor.group.remove(fallbackGroup);
+              anchor.group.add(loadedModel);
+            } catch (error) {
+              console.warn('GLB model load failed, fallback mesh retained.', error);
+            }
+          };
+
+          void tryLoadModel();
+        }
 
         anchor.onTargetFound = () => {
           onMarkerLocked(true);
@@ -210,9 +289,11 @@ export function useMindArRuntime({
 
         await withTimeout(loadMindARModule(), 9000, 'MindAR module load');
         const threeModule = await withTimeout(loadThreeModule(), 5000, 'Three.js module load');
+        const gltfLoaderModule = await withTimeout(loadGLTFLoaderModule(), 5000, 'GLTFLoader module load').catch(() => null);
+
         if (canceled || !containerRef.current || !window.MINDAR?.IMAGE?.MindARThree) return;
 
-        let runtime = buildRuntime(imageTargetSrc, threeModule);
+        let runtime = buildRuntime(imageTargetSrc, threeModule, gltfLoaderModule, productArModel);
 
         try {
           await withTimeout(runtime.mindarThree.start(), 12000, 'MindAR start');
@@ -224,7 +305,7 @@ export function useMindArRuntime({
             throw primaryError;
           }
 
-          runtime = buildRuntime(fallbackImageTargetSrc, threeModule);
+          runtime = buildRuntime(fallbackImageTargetSrc, threeModule, gltfLoaderModule, productArModel);
           await withTimeout(runtime.mindarThree.start(), 12000, 'MindAR fallback start');
         }
 
@@ -286,6 +367,7 @@ export function useMindArRuntime({
     onError,
     onMarkerLocked,
     onStage,
+    productArModel,
   ]);
 
   return status;

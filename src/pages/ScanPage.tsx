@@ -164,6 +164,7 @@ export function ScanPage() {
     containerRef,
     imageTargetSrc: resolution.product.scanTarget.mindTargetUrl,
     fallbackImageTargetSrc: resolution.product.scanTarget.fallbackMindTargetUrl,
+    productArModel: resolution.product.arModel,
     onStage,
     onCameraGranted: setCameraGranted,
     onMarkerLocked: setMarkerLocked,

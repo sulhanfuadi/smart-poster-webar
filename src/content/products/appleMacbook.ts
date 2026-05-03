@@ -25,6 +25,12 @@ export const appleMacbook: ProductConfig = {
     offerLabel: 'Open MacBook Offer Page',
   },
   scanTarget: buildProductScanTarget('apple-macbook'),
+  arModel: {
+    url: '/assets/models/apple-macbook/model.glb',
+    scale: [0.9, 0.9, 0.9],
+    position: [0, 0, 0],
+    rotation: [0, 0, 0],
+  },
   offerCTA: {
     url: 'https://example.com/apple-macbook-offer',
     label: 'Open MacBook Offer Page',

@@ -72,6 +72,15 @@ if (missingScanPage.length) {
   process.exit(1);
 }
 
+
+const macbookText = fs.readFileSync(path.join(root, 'src/content/products/appleMacbook.ts'), 'utf8');
+const macbookSnippets = ['arModel', 'model.glb'];
+const missingMacbook = macbookSnippets.filter((snippet) => !macbookText.includes(snippet));
+if (missingMacbook.length) {
+  console.error('MacBook AR model snippets missing:\n' + missingMacbook.join('\n'));
+  process.exit(1);
+}
+
 const vercelText = fs.readFileSync(path.join(root, 'vercel.json'), 'utf8');
 if (!vercelText.includes('rewrites')) {
   console.error('vercel.json must include SPA rewrites for route-based flow');

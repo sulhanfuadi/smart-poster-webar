@@ -26,6 +26,11 @@
   - `npm run markers:generate`
 - Template map is documented in `public/assets/markers/products/README.md`.
 
+## MacBook 3D model (optional but supported)
+- Place GLB model at: `public/assets/models/apple-macbook/model.glb`
+- Runtime auto-loads this model for `apple-macbook` product only.
+- If the file is missing/invalid, app automatically falls back to default mesh.
+
 ## Live flow
 1. Start at `/?product=<productId>` and set context quickly.
 2. Tap `Start AR Scan` and grant camera permission.

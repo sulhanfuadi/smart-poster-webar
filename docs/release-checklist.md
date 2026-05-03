@@ -22,6 +22,8 @@
   - `/scan?product=apple-watch`
 - Product configs stored in `src/content/products/` with registry update in `src/content/products/index.ts`.
 - Product marker assets are present in `public/assets/markers/products/<product-id>/`.
+- For `apple-macbook`, GLB model loading is verified when `public/assets/models/apple-macbook/model.glb` exists.
+- Missing/invalid MacBook GLB gracefully falls back to default mesh (no runtime crash).
 
 ## Mobile quality gate (strict)
 - Passes on latest Chrome Android.
