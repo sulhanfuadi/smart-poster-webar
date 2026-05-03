@@ -16,7 +16,8 @@ export function ScanHUD({ runtime, isMobile }: { runtime: ScanRuntimeState; isMo
 
       {runtime.stage === 'error' && (
         <div className="pointer-events-auto rounded-2xl border border-red-200 bg-apple-dangerSoft p-3 text-xs text-red-700">
-          AR camera runtime failed. Please open this page in Chrome Android or Safari iPhone and allow camera access.
+          <p className="font-medium">AR camera runtime failed.</p>
+          <p className="mt-1">{runtime.errorMessage ?? 'Use Retry AR, or switch to Basic Camera mode.'}</p>
         </div>
       )}
 

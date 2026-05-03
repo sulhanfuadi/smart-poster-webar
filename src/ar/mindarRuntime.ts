@@ -9,11 +9,13 @@ interface UseMindArOptions {
   onStage: (stage: 'requesting_camera' | 'ready' | 'searching' | 'found' | 'lost' | 'error') => void;
   onCameraGranted: (granted: boolean) => void;
   onMarkerLocked: (locked: boolean) => void;
+  onError?: (message: string | null) => void;
   enabled: boolean;
   bootNonce: number;
 }
 
 const MINDAR_SCRIPTS = [
+  '/vendor/mindar-image-three.prod.js',
   'https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js',
   'https://unpkg.com/mind-ar@1.2.5/dist/mindar-image-three.prod.js',
 ];
@@ -27,6 +29,29 @@ function withTimeout<T>(promise: Promise<T>, timeoutMs: number, label: string) {
   ]);
 }
 
+function normalizeRuntimeError(error: unknown) {
+  const raw = error instanceof Error ? error.message : String(error ?? 'Unknown runtime failure');
+  const message = raw.toLowerCase();
+
+  if (message.includes('notallowederror') || message.includes('permission') || message.includes('denied')) {
+    return 'Camera permission was denied. Open browser site settings, allow camera, then retry.';
+  }
+
+  if (message.includes('secure camera runtime') || message.includes('secure context')) {
+    return 'Camera requires secure HTTPS context. Reopen this page from a valid HTTPS URL.';
+  }
+
+  if (message.includes('script load')) {
+    return 'AR engine script failed to load. Check network/adblock and retry.';
+  }
+
+  if (message.includes('timed out')) {
+    return 'AR startup timed out. Retry camera and keep only one browser tab active.';
+  }
+
+  return `AR runtime failed: ${raw}`;
+}
+
 function loadMindARScript() {
   if (window.MINDAR?.IMAGE?.MindARThree) {
     return Promise.resolve();
@@ -36,8 +61,13 @@ function loadMindARScript() {
     new Promise<void>((resolve, reject) => {
       const existing = document.querySelector<HTMLScriptElement>(`script[data-mindar-src="${src}"]`);
       if (existing) {
+        if (window.MINDAR?.IMAGE?.MindARThree) {
+          resolve();
+          return;
+        }
+
         existing.addEventListener('load', () => resolve(), { once: true });
-        existing.addEventListener('error', () => reject(new Error('MindAR script failed to load')), { once: true });
+        existing.addEventListener('error', () => reject(new Error(`MindAR script failed to load from ${src}`)), { once: true });
         return;
       }
 
@@ -58,7 +88,7 @@ function loadMindARScript() {
         return tryLoad(src);
       }),
     Promise.reject(new Error('init')),
-  ).catch((error) => Promise.reject(error));
+  );
 }
 
 export function useMindArRuntime({
@@ -68,6 +98,7 @@ export function useMindArRuntime({
   onStage,
   onCameraGranted,
   onMarkerLocked,
+  onError,
   enabled,
   bootNonce,
 }: UseMindArOptions) {
@@ -83,6 +114,7 @@ export function useMindArRuntime({
 
     const boot = async () => {
       setIsBooting(true);
+      onError?.(null);
       onStage('requesting_camera');
       let permissionGranted = false;
 
@@ -188,10 +220,12 @@ export function useMindArRuntime({
             containerRef.current.removeChild(containerRef.current.firstChild);
           }
         };
-      } catch {
+      } catch (error) {
         if (!permissionGranted) {
           onCameraGranted(false);
         }
+
+        onError?.(normalizeRuntimeError(error));
         onStage('error');
       } finally {
         setIsBooting(false);
@@ -207,7 +241,17 @@ export function useMindArRuntime({
       runtimeRef.current.stop = null;
       runtimeRef.current.cleanup = null;
     };
-  }, [bootNonce, containerRef, enabled, fallbackImageTargetSrc, imageTargetSrc, onCameraGranted, onMarkerLocked, onStage]);
+  }, [
+    bootNonce,
+    containerRef,
+    enabled,
+    fallbackImageTargetSrc,
+    imageTargetSrc,
+    onCameraGranted,
+    onError,
+    onMarkerLocked,
+    onStage,
+  ]);
 
   return status;
 }
