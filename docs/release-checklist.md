@@ -1,4 +1,4 @@
-# Release Checklist (V2 Rewrite)
+# Release Checklist (V2 Multi-Product)
 
 ## Functional gate
 - `npm run build` passes.
@@ -6,6 +6,12 @@
 - `/` shows minimal intro with single dominant CTA.
 - `/scan` opens full-screen AR interface with visible runtime state.
 - `/after-scan` shows clean conversion handoff CTA.
+- `/scan?product=<valid-id>` loads matching product copy + target.
+- `/scan?product=<invalid-id>` falls back to default product with non-blocking notice.
+- Product context persists across flow:
+  - `/?product=<id>`
+  - `/scan?product=<id>`
+  - `/after-scan?product=<id>`
 
 ## Mobile quality gate (strict)
 - Passes on latest Chrome Android.

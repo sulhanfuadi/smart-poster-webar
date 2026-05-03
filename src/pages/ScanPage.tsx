@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ScanHUD } from '../components/ScanHUD';
-import { routes, scanTarget, viewCopy } from '../content/appContent';
-import { useScanSession } from '../state/ScanSessionContext';
+import { getActiveProduct, routes, toProductPath } from '../content/appContent';
 import { useMindArRuntime } from '../ar/mindarRuntime';
+import { useScanSession } from '../state/ScanSessionContext';
 import type { ScanStage } from '../types/app';
 
 function isProbablyMobile() {
@@ -25,8 +25,21 @@ function toCameraErrorMessage(error: unknown) {
   return `Basic camera fallback failed: ${raw}`;
 }
 
+function buildFallbackNotice(reason: 'missing' | 'invalid' | null, requestedProductId: string | null, productName: string) {
+  if (reason === 'invalid' && requestedProductId) {
+    return `Product "${requestedProductId}" is not found. Using default: ${productName}.`;
+  }
+
+  if (reason === 'missing') {
+    return `No product selected in URL. Using default: ${productName}.`;
+  }
+
+  return null;
+}
+
 export function ScanPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const basicVideoRef = useRef<HTMLVideoElement | null>(null);
   const basicStreamRef = useRef<MediaStream | null>(null);
@@ -35,6 +48,8 @@ export function ScanPage() {
 
   const [bootNonce, setBootNonce] = useState(0);
   const [basicCameraMode, setBasicCameraMode] = useState(false);
+
+  const resolution = useMemo(() => getActiveProduct(searchParams), [searchParams]);
 
   const stopBasicCamera = useCallback(() => {
     if (basicVideoRef.current) {
@@ -147,8 +162,8 @@ export function ScanPage() {
 
   useMindArRuntime({
     containerRef,
-    imageTargetSrc: scanTarget.customImageTargetSrc,
-    fallbackImageTargetSrc: scanTarget.fallbackImageTargetSrc,
+    imageTargetSrc: resolution.product.scanTarget.mindTargetUrl,
+    fallbackImageTargetSrc: resolution.product.scanTarget.fallbackMindTargetUrl,
     onStage,
     onCameraGranted: setCameraGranted,
     onMarkerLocked: setMarkerLocked,
@@ -157,22 +172,26 @@ export function ScanPage() {
     bootNonce,
   });
 
+  const fallbackNotice = resolution.usedFallback
+    ? buildFallbackNotice(resolution.fallbackReason, resolution.requestedProductId, resolution.product.name)
+    : null;
+
   return (
     <div className="min-h-[100dvh] bg-apple-bg">
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-3 pb-2 pt-[max(env(safe-area-inset-top),0.75rem)]">
         <Link
-          to={routes.intro}
+          to={toProductPath(routes.intro, resolution.productId)}
           className="flex h-10 items-center justify-center rounded-full border border-apple-stroke bg-white px-4 text-sm text-apple-text"
         >
-          {viewCopy.scan.back}
+          {resolution.product.scan.back}
         </Link>
-        <p className="text-sm font-medium text-apple-muted">{viewCopy.scan.title}</p>
+        <p className="text-center text-sm font-medium text-apple-muted">{resolution.product.scan.title}</p>
         <button
           type="button"
-          onClick={() => navigate(routes.afterScan)}
+          onClick={() => navigate(toProductPath(routes.afterScan, resolution.productId))}
           className="flex h-10 items-center justify-center rounded-full bg-apple-accent px-4 text-sm font-medium text-white"
         >
-          {viewCopy.scan.continue}
+          {resolution.product.scan.continue}
         </button>
       </header>
 
@@ -189,7 +208,14 @@ export function ScanPage() {
           />
         )}
 
-        <ScanHUD runtime={runtime} isMobile={mobile} />
+        <ScanHUD
+          runtime={runtime}
+          isMobile={mobile}
+          runtimeMessages={resolution.product.scan.runtimeMessages}
+          desktopHint={resolution.product.intro.desktopHint}
+          guidanceText={resolution.product.scan.guidance}
+          fallbackNotice={fallbackNotice}
+        />
 
         {runtime.stage === 'error' && (
           <div className="absolute bottom-4 left-1/2 z-40 w-[min(92%,480px)] -translate-x-1/2 rounded-2xl border border-red-200 bg-apple-dangerSoft p-3 text-center text-sm text-red-700">

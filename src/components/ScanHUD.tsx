@@ -1,16 +1,31 @@
-import { runtimeMessages, operatorGuidance, viewCopy } from '../content/appContent';
-import type { ScanRuntimeState } from '../types/app';
+import { operatorGuidance } from '../content/appContent';
+import type { ScanRuntimeMessages, ScanRuntimeState } from '../types/app';
 
-export function ScanHUD({ runtime, isMobile }: { runtime: ScanRuntimeState; isMobile: boolean }) {
+interface ScanHUDProps {
+  runtime: ScanRuntimeState;
+  isMobile: boolean;
+  runtimeMessages: ScanRuntimeMessages;
+  desktopHint: string;
+  guidanceText: string;
+  fallbackNotice?: string | null;
+}
+
+export function ScanHUD({ runtime, isMobile, runtimeMessages, desktopHint, guidanceText, fallbackNotice }: ScanHUDProps) {
   const message = runtimeMessages[runtime.stage] ?? runtimeMessages.idle;
 
   return (
     <div className="pointer-events-none absolute left-3 right-3 top-3 z-30 space-y-2">
+      {fallbackNotice && (
+        <div className="pointer-events-auto rounded-2xl border border-amber-200 bg-apple-warningSoft p-3 text-xs text-amber-800">
+          {fallbackNotice}
+        </div>
+      )}
+
       <div className="pointer-events-auto rounded-2xl border border-apple-stroke bg-white/92 p-3 shadow-apple backdrop-blur">
         <p className="text-[11px] uppercase tracking-[0.11em] text-apple-muted">Scan Status</p>
         <h2 className="mt-1 text-sm font-semibold text-apple-text">{message}</h2>
         <p className="mt-1 text-xs leading-relaxed text-apple-muted">
-          {runtime.stage === 'lost' ? operatorGuidance.markerLost : operatorGuidance.markerSlow}
+          {runtime.stage === 'lost' ? operatorGuidance.markerLost : guidanceText}
         </p>
       </div>
 
@@ -23,7 +38,7 @@ export function ScanHUD({ runtime, isMobile }: { runtime: ScanRuntimeState; isMo
 
       {!isMobile && (
         <div className="pointer-events-auto rounded-2xl border border-red-200 bg-apple-dangerSoft p-3 text-xs text-red-700">
-          {viewCopy.intro.desktopHint}
+          {desktopHint}
         </div>
       )}
     </div>

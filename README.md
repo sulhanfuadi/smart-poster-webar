@@ -13,6 +13,14 @@ A modern AR-first web demo for Apple-device poster campaigns, rebuilt with React
 - `/scan` full-screen AR scan session
 - `/after-scan` conversion handoff (offer CTA)
 
+## Multi-product URL contract
+- Product is selected via query param: `?product=<productId>`
+- Example links:
+  - `/?product=apple-iphone`
+  - `/scan?product=apple-iphone`
+  - `/scan?product=apple-macbook`
+- Invalid or missing product falls back to default with a non-blocking notice.
+
 ## Run locally
 ```bash
 npm install
@@ -26,9 +34,13 @@ npm run preview
 npm run smoke:test
 ```
 
-## AR target note
-- Current v1 uses a default MindAR sample target (`card.mind`) to validate runtime stability.
-- To use your own poster marker in production, replace `scanTarget.imageTargetSrc` in `src/content/appContent.ts` with your generated `.mind` target.
+## Product config note
+- Multi-product content is defined in `src/content/appContent.ts` (`products` registry).
+- For each product, set:
+  - copy (intro/scan/after-scan)
+  - `scanTarget.mindTargetUrl` (public HTTPS `.mind` file)
+  - `scanTarget.referenceImageUrl`
+  - `offerCTA` and `hotspots`
 
 ## QA policy
 - Desktop is preview-only.
@@ -37,5 +49,5 @@ npm run smoke:test
   - Safari iPhone (latest)
 
 ## V1 scope
-- Included: intro, full-screen scan, runtime states, hotspots, post-scan CTA.
+- Included: intro, full-screen scan, runtime states, hotspots config, post-scan CTA.
 - Excluded (planned v1.1): chatbot UI/runtime.

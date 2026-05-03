@@ -1,10 +1,15 @@
 import { useMemo, useState } from 'react';
-import { hotspots } from '../content/appContent';
+import type { ProductHotspot } from '../types/app';
 
-export function FeatureHotspots() {
-  const [activeId, setActiveId] = useState<(typeof hotspots)[number]['id']>(hotspots[0].id);
+export function FeatureHotspots({ hotspots }: { hotspots: ProductHotspot[] }) {
+  const initialHotspot = hotspots[0];
+  const [activeId, setActiveId] = useState<string>(initialHotspot?.id ?? '');
 
-  const active = useMemo(() => hotspots.find((h) => h.id === activeId) ?? hotspots[0], [activeId]);
+  const active = useMemo(() => hotspots.find((hotspot) => hotspot.id === activeId) ?? initialHotspot, [activeId, hotspots, initialHotspot]);
+
+  if (!initialHotspot || !active) {
+    return null;
+  }
 
   return (
     <>

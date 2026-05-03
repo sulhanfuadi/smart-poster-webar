@@ -43,10 +43,18 @@ if (missingRuntime.length) {
 }
 
 const contentText = fs.readFileSync(path.join(root, 'src/content/appContent.ts'), 'utf8');
-const contentSnippets = ['viewCopy', 'runtimeMessages', 'offerCTA', 'scanTarget'];
+const contentSnippets = ['products', 'defaultProductId', 'getActiveProduct', 'toProductPath'];
 const missingContent = contentSnippets.filter((snippet) => !contentText.includes(snippet));
 if (missingContent.length) {
   console.error('Content snippets missing:\n' + missingContent.join('\n'));
+  process.exit(1);
+}
+
+const scanPageText = fs.readFileSync(path.join(root, 'src/pages/ScanPage.tsx'), 'utf8');
+const scanPageSnippets = ['useSearchParams', 'getActiveProduct', 'toProductPath', 'mindTargetUrl'];
+const missingScanPage = scanPageSnippets.filter((snippet) => !scanPageText.includes(snippet));
+if (missingScanPage.length) {
+  console.error('Scan page product-query snippets missing:\n' + missingScanPage.join('\n'));
   process.exit(1);
 }
 
@@ -56,4 +64,4 @@ if (!vercelText.includes('rewrites')) {
   process.exit(1);
 }
 
-console.log('Smoke check passed: React/TS route-based AR-first architecture is present.');
+console.log('Smoke check passed: multi-product query-based AR flow is present.');
