@@ -7,6 +7,12 @@ const mustExist = [
   'src/App.tsx',
   'src/index.css',
   'src/content/appContent.ts',
+  'src/content/products/index.ts',
+  'src/content/products/appleIphone.ts',
+  'src/content/products/appleMacbook.ts',
+  'src/content/products/appleAirpods.ts',
+  'src/content/products/appleIpad.ts',
+  'src/content/products/appleWatch.ts',
   'src/state/ScanSessionContext.tsx',
   'src/ar/mindarRuntime.ts',
   'src/pages/IntroPage.tsx',
@@ -47,6 +53,14 @@ const contentSnippets = ['products', 'defaultProductId', 'getActiveProduct', 'to
 const missingContent = contentSnippets.filter((snippet) => !contentText.includes(snippet));
 if (missingContent.length) {
   console.error('Content snippets missing:\n' + missingContent.join('\n'));
+  process.exit(1);
+}
+
+const productIndexText = fs.readFileSync(path.join(root, 'src/content/products/index.ts'), 'utf8');
+const productSnippets = ['appleIphone', 'appleMacbook', 'appleAirpods', 'appleIpad', 'appleWatch'];
+const missingProducts = productSnippets.filter((snippet) => !productIndexText.includes(snippet));
+if (missingProducts.length) {
+  console.error('Product symbols missing in registry:\n' + missingProducts.join('\n'));
   process.exit(1);
 }
 

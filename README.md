@@ -15,10 +15,18 @@ A modern AR-first web demo for Apple-device poster campaigns, rebuilt with React
 
 ## Multi-product URL contract
 - Product is selected via query param: `?product=<productId>`
+- Available product IDs:
+  - `apple-iphone`
+  - `apple-macbook`
+  - `apple-airpods`
+  - `apple-ipad`
+  - `apple-watch`
 - Example links:
-  - `/?product=apple-iphone`
   - `/scan?product=apple-iphone`
   - `/scan?product=apple-macbook`
+  - `/scan?product=apple-airpods`
+  - `/scan?product=apple-ipad`
+  - `/scan?product=apple-watch`
 - Invalid or missing product falls back to default with a non-blocking notice.
 
 ## Run locally
@@ -35,12 +43,14 @@ npm run smoke:test
 ```
 
 ## Product config note
-- Multi-product content is defined in `src/content/appContent.ts` (`products` registry).
+- Product configs are split into `src/content/products/` (one file per product).
+- Registry export is `src/content/products/index.ts`.
 - For each product, set:
   - copy (intro/scan/after-scan)
   - `scanTarget.mindTargetUrl` (public HTTPS `.mind` file)
   - `scanTarget.referenceImageUrl`
   - `offerCTA` and `hotspots`
+- Current AirPods, iPad, and Watch entries still reuse sample MindAR targets and must be replaced with final poster `.mind` targets for production.
 
 ## QA policy
 - Desktop is preview-only.

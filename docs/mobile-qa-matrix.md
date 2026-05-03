@@ -11,7 +11,11 @@
 4. AR scan viewport is full-screen and controls remain tappable.
 5. Marker runtime states can be observed (searching/found/lost/error).
 6. Continue to `/after-scan?product=apple-iphone` and verify offer CTA visibility.
-7. Repeat scenarios 1–6 with `apple-macbook`.
+7. Repeat scenarios 1–6 with:
+   - `apple-macbook`
+   - `apple-airpods`
+   - `apple-ipad`
+   - `apple-watch`
 8. Open `/scan?product=unknown` and verify fallback notice + default product behavior.
 
 ## Fail criteria

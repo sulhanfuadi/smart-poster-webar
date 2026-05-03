@@ -13,6 +13,16 @@
   - `/scan?product=<id>`
   - `/after-scan?product=<id>`
 
+## Product coverage gate
+- Product routes verified:
+  - `/scan?product=apple-iphone`
+  - `/scan?product=apple-macbook`
+  - `/scan?product=apple-airpods`
+  - `/scan?product=apple-ipad`
+  - `/scan?product=apple-watch`
+- New product configs stored in `src/content/products/` with registry update in `src/content/products/index.ts`.
+- AirPods/iPad/Watch marker targets flagged as sample targets pending final poster `.mind` files.
+
 ## Mobile quality gate (strict)
 - Passes on latest Chrome Android.
 - Passes on latest Safari iPhone.
