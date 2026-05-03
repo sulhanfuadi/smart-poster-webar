@@ -1,15 +1,19 @@
-# Release Checklist
+# Release Checklist (V2 Rewrite)
 
-## Presentation-ready
+## Functional gate
 - `npm run build` passes.
 - `npm run smoke:test` passes.
-- Intro screen is minimal with one dominant `Start AR Scan` CTA.
-- AR scan view shows compact status + guidance without overlay collisions.
-- Post-scan view contains local-first FAQ support and offer CTA.
-- Operator understands `docs/operator-runbook.md`.
+- `/` shows minimal intro with single dominant CTA.
+- `/scan` opens full-screen AR interface with visible runtime state.
+- `/after-scan` shows clean conversion handoff CTA.
 
-## Deploy-ready
-- Production origin uses HTTPS.
-- Poster/marker/branding assets load without broken paths.
-- Known limitations are communicated honestly.
-- Static-first path runs without mandatory backend dependency.
+## Mobile quality gate (strict)
+- Passes on latest Chrome Android.
+- Passes on latest Safari iPhone.
+- No overlap, hidden-view leakage, or collapsed layout on narrow screens.
+- Runtime transitions observable: requesting_camera → searching → found/lost/error.
+
+## Deploy gate
+- Vercel preview URL available for QA (HTTPS).
+- SPA route rewrites work for `/scan` and `/after-scan`.
+- Known limitations communicated in `docs/known-limitations.md`.

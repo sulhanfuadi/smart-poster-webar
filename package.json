@@ -1,19 +1,29 @@
 {
-  "name": "smart-poster-webar-final",
+  "name": "smart-poster-webar",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc -b && vite build",
     "preview": "vite preview",
     "smoke:test": "node scripts/smoke-check.mjs"
   },
   "dependencies": {
-    "@ar-js-org/ar.js": "^3.4.8",
-    "aframe": "^1.7.1"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.14.2",
+    "three": "^0.184.0"
   },
   "devDependencies": {
-    "vite": "^7.1.7"
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@types/three": "^0.184.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^6.0.3",
+    "vite": "^7.3.2"
   }
 }

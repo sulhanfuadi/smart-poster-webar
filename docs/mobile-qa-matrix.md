@@ -1,19 +1,19 @@
-# Mobile QA Matrix
+# Mobile QA Matrix (Strict)
 
-## Minimum device targets
-- Latest Chrome on Android
-- Latest Safari on iPhone
+## Target devices
+- Android phone (latest Chrome)
+- iPhone (latest Safari)
 
-## Required pass scenarios
-- Intro view loads cleanly with one clear primary CTA.
-- Tapping `Start AR Scan` immediately transitions to AR view.
-- Camera permission allow/deny both provide clear runtime feedback.
-- Marker lock works under good lighting.
-- Marker lost transitions back to searching with clear guidance.
-- Hotspots remain tappable and readable on narrow screens.
-- Chatbot appears only on post-scan view and responds from local FAQ.
-- Offer CTA remains visible in post-scan support view.
+## Mandatory scenarios
+1. Open `/` and confirm one clear CTA (`Start AR Scan`).
+2. Tap CTA and verify route changes to `/scan`.
+3. Camera permission prompt appears and state changes accordingly.
+4. AR scan viewport is full-screen and controls remain tappable.
+5. Marker runtime states can be observed (searching/found/lost/error).
+6. Continue to `/after-scan` and verify offer CTA visibility.
 
-## Validation notes
-- Desktop is preview mode only; tracking validation must be done on mobile.
-- Glossy, blurry, or undersized markers reduce lock stability.
+## Fail criteria
+- Multiple page sections visible simultaneously.
+- AR viewport not full-screen on mobile.
+- Controls clipped by safe-area/notch.
+- Route flow broken or requires page refresh to continue.

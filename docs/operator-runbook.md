@@ -1,19 +1,18 @@
-# Operator Runbook
+# Operator Runbook (V2)
 
-## Quick preparation
-- Use a modern mobile browser over HTTPS.
-- Prepare a printed poster with the custom marker in the intended area.
-- Ensure sufficient lighting and minimal glare.
-- Keep Hiro fallback marker ready for baseline troubleshooting.
+## Pre-demo setup
+- Use Vercel preview URL (HTTPS) or localhost over mobile.
+- Open demo on a modern mobile browser.
+- Prepare marker reference image used by current MindAR target.
 
-## Live presentation flow
-- Start from the minimal intro and set context quickly.
-- Tap `Start AR Scan`, lock marker, and narrate hotspots in sequence.
-- Move to post-scan support for concise FAQ answers.
-- Close with a single offer CTA handoff.
+## Live flow
+1. Start at `/` and set context quickly.
+2. Tap `Start AR Scan` and grant camera permission.
+3. Keep marker stable for lock; narrate hotspots.
+4. Continue to `/after-scan` and close with offer CTA.
 
-## If issues occur
-- Camera denied: re-enable permission for this origin and retry scan.
-- Marker slow to lock: move closer, flatten poster, reduce glare.
-- Tracking lost: hold phone steady 1–2 seconds and re-center marker.
-- Remote assistant fails: continue with local-first FAQ flow.
+## Troubleshooting
+- Camera denied: re-enable site camera permission and retry.
+- Marker not locking: improve lighting, reduce glare, stabilize frame.
+- Lost tracking: re-center full marker and hold still briefly.
+- Desktop opened by mistake: return to mobile device for actual scan.

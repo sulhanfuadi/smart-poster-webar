@@ -1,6 +1,6 @@
-# Known Limitations
+# Known Limitations (V2)
 
-- Best marker tracking still requires a modern mobile browser and HTTPS origin.
-- Desktop preview does not represent real camera tracking performance.
-- Marker print quality and lighting quality directly affect tracking stability.
-- Remote chatbot mode is optional and not required for core live demos.
+- Full AR validation requires modern mobile browsers and HTTPS.
+- Desktop remains preview-only and is not a valid tracking benchmark.
+- Current v1 uses default MindAR sample target; production poster rollout requires a custom generated `.mind` target.
+- Chatbot is intentionally excluded from v1 and planned for v1.1.

@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #app {
+    @apply min-h-screen;
+  }
+
+  body {
+    @apply bg-apple-bg text-apple-text antialiased;
+    text-rendering: optimizeLegibility;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Segoe UI', sans-serif;
+  }
+}
+
+@layer components {
+  .safe-bottom {
+    padding-bottom: max(env(safe-area-inset-bottom), 0.75rem);
+  }
+}

@@ -2,82 +2,58 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const root = process.cwd();
-const files = [
-  'src/config/content.js',
-  'src/lib/arScene.js',
-  'src/lib/chatbot.js',
-  'src/main.js',
+const mustExist = [
+  'src/main.tsx',
+  'src/App.tsx',
+  'src/index.css',
+  'src/content/appContent.ts',
+  'src/state/ScanSessionContext.tsx',
+  'src/ar/mindarRuntime.ts',
+  'src/pages/IntroPage.tsx',
+  'src/pages/ScanPage.tsx',
+  'src/pages/AfterScanPage.tsx',
   'README.md',
-  'docs/operator-runbook.md',
-  'docs/mobile-qa-matrix.md',
-  'docs/known-limitations.md',
   'docs/release-checklist.md',
-  'public/assets/poster/poster-preview.svg',
-  'public/assets/poster/poster-marker-guide.svg',
-  'public/assets/markers/custom-marker-reference.svg',
-  'public/assets/markers/custom-marker-placeholder.patt',
-  'public/assets/branding/brand-thumb.svg',
-  'public/assets/models/phone-demo.glb',
+  'docs/mobile-qa-matrix.md',
+  'docs/operator-runbook.md',
+  'docs/known-limitations.md',
+  'vercel.json',
 ];
 
-const missing = files.filter((file) => !fs.existsSync(path.join(root, file)));
+const missing = mustExist.filter((file) => !fs.existsSync(path.join(root, file)));
 if (missing.length) {
   console.error('Missing required files:\n' + missing.join('\n'));
   process.exit(1);
 }
 
-const configText = fs.readFileSync(path.join(root, 'src/config/content.js'), 'utf8');
-const requiredConfigSnippets = [
-  'intro_minimal',
-  'ar_scan',
-  'post_scan',
-  'appleInspired',
-  "mode: 'local'",
-  'Presentation FAQ Assistant',
-  'knownLimitations',
-  'markerSearchTimeoutMs',
-];
-const missingConfigSnippets = requiredConfigSnippets.filter((snippet) => !configText.includes(snippet));
-if (missingConfigSnippets.length) {
-  console.error('Config missing snippets:\n' + missingConfigSnippets.join('\n'));
+const appText = fs.readFileSync(path.join(root, 'src/App.tsx'), 'utf8');
+const appSnippets = ['routes.scan', 'routes.afterScan', '<Routes>', '<Route'];
+const missingApp = appSnippets.filter((snippet) => !appText.includes(snippet));
+if (missingApp.length) {
+  console.error('App route snippets missing:\n' + missingApp.join('\n'));
   process.exit(1);
 }
 
-const sceneText = fs.readFileSync(path.join(root, 'src/lib/arScene.js'), 'utf8');
-const requiredSceneSnippets = [
-  'data-view="intro_minimal"',
-  'data-view="ar_scan"',
-  'data-view="post_scan"',
-  'enter-ar-btn',
-  'main-marker',
-  'chatbot-panel',
-];
-const missingSceneSnippets = requiredSceneSnippets.filter((snippet) => !sceneText.includes(snippet));
-if (missingSceneSnippets.length) {
-  console.error('Scene missing snippets:\n' + missingSceneSnippets.join('\n'));
+const runtimeText = fs.readFileSync(path.join(root, 'src/ar/mindarRuntime.ts'), 'utf8');
+const runtimeSnippets = ['MindARThree', 'requesting_camera', 'onTargetFound', 'onTargetLost'];
+const missingRuntime = runtimeSnippets.filter((snippet) => !runtimeText.includes(snippet));
+if (missingRuntime.length) {
+  console.error('MindAR runtime snippets missing:\n' + missingRuntime.join('\n'));
   process.exit(1);
 }
 
-const runtimeText = fs.readFileSync(path.join(root, 'src/main.js'), 'utf8');
-const requiredRuntimeSnippets = [
-  'setRuntimeStage',
-  'setChatbotPending',
-  'setView',
-  'startMarkerSearchTimer',
-  'checkCompatibility',
-];
-const missingRuntimeSnippets = requiredRuntimeSnippets.filter((snippet) => !runtimeText.includes(snippet));
-if (missingRuntimeSnippets.length) {
-  console.error('Runtime missing snippets:\n' + missingRuntimeSnippets.join('\n'));
+const contentText = fs.readFileSync(path.join(root, 'src/content/appContent.ts'), 'utf8');
+const contentSnippets = ['viewCopy', 'runtimeMessages', 'offerCTA', 'scanTarget'];
+const missingContent = contentSnippets.filter((snippet) => !contentText.includes(snippet));
+if (missingContent.length) {
+  console.error('Content snippets missing:\n' + missingContent.join('\n'));
   process.exit(1);
 }
 
-const readmeText = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
-const requiredReadmeSnippets = ['Apple-inspired', 'minimal intro', 'post-scan', 'Handoff documents'];
-const missingReadmeSnippets = requiredReadmeSnippets.filter((snippet) => !readmeText.includes(snippet));
-if (missingReadmeSnippets.length) {
-  console.error('README missing snippets:\n' + missingReadmeSnippets.join('\n'));
+const vercelText = fs.readFileSync(path.join(root, 'vercel.json'), 'utf8');
+if (!vercelText.includes('rewrites')) {
+  console.error('vercel.json must include SPA rewrites for route-based flow');
   process.exit(1);
 }
 
-console.log('Smoke check passed: three-view Apple-inspired flow, AR scan runtime, and local-first FAQ support are present.');
+console.log('Smoke check passed: React/TS route-based AR-first architecture is present.');
