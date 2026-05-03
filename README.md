@@ -34,6 +34,8 @@ A modern AR-first web demo for Apple-device poster campaigns, rebuilt with React
   - `public/assets/markers/products/<productId>/target.mind`
   - `public/assets/markers/products/<productId>/reference.png`
 - Product source images live in `public/assets/products/source`
+- Generated marker cards are saved as `public/assets/markers/products/<productId>/reference.png`
+- For tracking validation, scan the generated `reference.png` (or printed copy) for the matching product.
 - You can regenerate all marker targets using:
 
 ```bash
