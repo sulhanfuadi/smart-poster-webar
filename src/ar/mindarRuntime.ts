@@ -14,10 +14,10 @@ interface UseMindArOptions {
   bootNonce: number;
 }
 
-const MINDAR_SCRIPTS = [
-  '/vendor/mindar-image-three.prod.js',
-  'https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js',
-  'https://unpkg.com/mind-ar@1.2.5/dist/mindar-image-three.prod.js',
+const MINDAR_MODULE_URLS = [
+  'https://esm.sh/mind-ar@1.2.5/dist/mindar-image-three.prod.js?bundle',
+  'https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js?module',
+  'https://unpkg.com/mind-ar@1.2.5/dist/mindar-image-three.prod.js?module',
 ];
 
 function withTimeout<T>(promise: Promise<T>, timeoutMs: number, label: string) {
@@ -41,8 +41,8 @@ function normalizeRuntimeError(error: unknown) {
     return 'Camera requires secure HTTPS context. Reopen this page from a valid HTTPS URL.';
   }
 
-  if (message.includes('script load')) {
-    return 'AR engine script failed to load. Check network/adblock and retry.';
+  if (message.includes('script load') || message.includes('module load') || message.includes('failed to fetch dynamically imported module')) {
+    return 'AR engine module failed to load. Check network/adblock/shields, then retry.';
   }
 
   if (message.includes('timed out')) {
@@ -52,43 +52,46 @@ function normalizeRuntimeError(error: unknown) {
   return `AR runtime failed: ${raw}`;
 }
 
-function loadMindARScript() {
-  if (window.MINDAR?.IMAGE?.MindARThree) {
-    return Promise.resolve();
+function ensureGlobalMindAR(moduleValue: unknown) {
+  const moduleRecord = moduleValue as Record<string, unknown>;
+  const defaultRecord = moduleRecord?.default as Record<string, unknown> | undefined;
+
+  const maybeCtor = moduleRecord?.MindARThree ?? defaultRecord?.MindARThree;
+
+  if (!maybeCtor) {
+    throw new Error('MindAR module loaded but MindARThree export is missing');
   }
 
-  const tryLoad = (src: string) =>
-    new Promise<void>((resolve, reject) => {
-      const existing = document.querySelector<HTMLScriptElement>(`script[data-mindar-src="${src}"]`);
-      if (existing) {
-        if (window.MINDAR?.IMAGE?.MindARThree) {
-          resolve();
-          return;
-        }
+  if (!window.MINDAR) {
+    window.MINDAR = {} as NonNullable<Window['MINDAR']>;
+  }
 
-        existing.addEventListener('load', () => resolve(), { once: true });
-        existing.addEventListener('error', () => reject(new Error(`MindAR script failed to load from ${src}`)), { once: true });
-        return;
-      }
+  if (!window.MINDAR.IMAGE) {
+    window.MINDAR.IMAGE = {} as NonNullable<NonNullable<Window['MINDAR']>['IMAGE']>;
+  }
 
-      const script = document.createElement('script');
-      script.src = src;
-      script.async = true;
-      script.dataset.mindar = 'true';
-      script.dataset.mindarSrc = src;
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error(`MindAR script failed to load from ${src}`));
-      document.head.appendChild(script);
-    });
+  const imageNamespace = window.MINDAR.IMAGE as NonNullable<NonNullable<Window['MINDAR']>['IMAGE']>;
+  imageNamespace.MindARThree = maybeCtor as typeof imageNamespace.MindARThree;
+}
 
-  return MINDAR_SCRIPTS.reduce<Promise<void>>(
-    (chain, src) =>
-      chain.catch(() => {
-        if (window.MINDAR?.IMAGE?.MindARThree) return Promise.resolve();
-        return tryLoad(src);
-      }),
-    Promise.reject(new Error('init')),
-  );
+async function loadMindARModule() {
+  if (window.MINDAR?.IMAGE?.MindARThree) {
+    return;
+  }
+
+  let lastError: unknown = null;
+
+  for (const url of MINDAR_MODULE_URLS) {
+    try {
+      const moduleValue = await import(/* @vite-ignore */ url);
+      ensureGlobalMindAR(moduleValue);
+      return;
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error('Unable to load MindAR module');
 }
 
 export function useMindArRuntime({
@@ -179,7 +182,7 @@ export function useMindArRuntime({
         onCameraGranted(true);
         onStage('ready');
 
-        await withTimeout(loadMindARScript(), 7000, 'MindAR script load');
+        await withTimeout(loadMindARModule(), 9000, 'MindAR module load');
         if (canceled || !containerRef.current || !window.MINDAR?.IMAGE?.MindARThree) return;
 
         let runtime = buildRuntime(imageTargetSrc);
