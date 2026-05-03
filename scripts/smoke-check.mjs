@@ -73,7 +73,7 @@ if (missingRuntimeSnippets.length) {
 }
 
 const readmeText = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
-const requiredReadmeSnippets = ['Academic polished', 'local-first', 'Static-first', 'Dokumen handoff'];
+const requiredReadmeSnippets = ['Academic polished', 'local-first', 'Static-first', 'Handoff documents'];
 const missingReadmeSnippets = requiredReadmeSnippets.filter((snippet) => !readmeText.includes(snippet));
 if (missingReadmeSnippets.length) {
   console.error('README missing snippets:\n' + missingReadmeSnippets.join('\n'));
