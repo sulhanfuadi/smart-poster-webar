@@ -99,6 +99,6 @@ export const operatorGuidance = {
 } as const;
 
 export const appMeta = {
-  appName: 'Apple Devices Smart Poster AR Demo',
+  appName: 'Apple Devices AR-Enhanced WebAR Demo',
   supportedMobile: 'Chrome Android / Safari iPhone',
 };

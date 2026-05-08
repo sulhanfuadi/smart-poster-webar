@@ -1,6 +1,6 @@
-# Apple Devices Smart Poster AR Demo (V2)
+# Apple Devices AR-Enhanced WebAR Demo (V2)
 
-A modern AR-first web demo for Apple-device poster campaigns, rebuilt with React + TypeScript + MindAR for stable mobile presentation flow.
+A modern AR-first WebAR demo for Apple-device AR-enhanced digital poster campaigns, rebuilt with React + TypeScript + MindAR for stable mobile presentation flow.
 
 ## Core architecture
 - Vite + React + TypeScript

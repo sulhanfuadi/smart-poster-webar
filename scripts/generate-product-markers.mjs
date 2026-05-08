@@ -110,7 +110,7 @@ function createMarkerCanvas(productId, productTitle, accentColor, productImage) 
 
   ctx.fillStyle = '#374151';
   ctx.font = '400 34px Arial';
-  ctx.fillText('Smart Poster AR Marker', width / 2, 240);
+  ctx.fillText('AR-Enhanced WebAR Marker', width / 2, 240);
 
   const frameX = 130;
   const frameY = 300;
