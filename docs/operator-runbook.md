@@ -1,15 +1,15 @@
-# Operator Runbook (Single-Marker MacBook Air MVP)
+# Operator Runbook (Scan-First Apple Product MVP)
 
 ## Pre-demo setup
-- Use HTTPS URL (Vercel preview recommended).
-- Open demo on modern mobile browser.
-- Prepare this exact marker image:
+- Use an HTTPS URL (Vercel preview or active tunnel).
+- Open demo on a modern mobile browser.
+- Prepare this marker image:
   - `public/assets/markers/mvp/macbook-air/reference.png`
 - Ensure marker target exists:
   - `public/assets/markers/mvp/macbook-air/target.mind`
 
 ## Marker regeneration
-If poster source changes, regenerate target:
+If source poster changes, regenerate target:
 
 ```bash
 npm run marker:generate
@@ -21,19 +21,18 @@ Script source priority:
 3. existing `public/assets/markers/mvp/macbook-air/reference.png`
 
 ## Live demo flow
-1. Open `/` and explain single-marker MVP context.
-2. Tap `Start AR Scan / Mulai Scan AR`.
-3. Grant camera permission.
-4. Point camera to the same MacBook Air poster until marker lock.
-5. Tap `Continue / Lanjut` to open action hub.
-6. Demonstrate CTA links:
-   - Detail (Apple product page)
+1. Open `/` (auto redirects to `/scan`).
+2. Grant camera permission.
+3. Point camera at the same marker image until lock is detected.
+4. Show in-scan product panel once marker is locked.
+5. Demonstrate action links:
+   - Details (Apple product page)
    - Contact (WhatsApp)
    - Buy (Apple buy page)
-7. Toggle dummy tabs `2D` and `3D`.
+6. Switch between `2D` and `3D` dummy tabs.
 
 ## Troubleshooting
 - Camera denied: re-enable camera permission in site settings.
-- Marker not locking: reduce glare, keep full poster visible, stabilize hands.
+- Marker not locking: reduce glare, keep full marker visible, stabilize device.
 - Lost tracking: re-center marker and hold still briefly.
-- Desktop opened by mistake: switch to mobile device for real scan.
+- Desktop opened by mistake: switch to mobile for real scan validation.

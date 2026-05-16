@@ -1,18 +1,18 @@
-# Release Checklist (Single-Marker MVP)
+# Release Checklist (Scan-First Single-Marker MVP)
 
 ## Functional gate
 - `npm run marker:generate` passes.
 - `npm run build` passes.
 - `npm run smoke:test` passes.
-- `/` shows bilingual intro + scan CTA.
+- `/` redirects to `/scan`.
 - `/scan` opens full-screen AR camera flow.
-- `/after-scan` shows action hub (`Detail`, `Contact`, `Buy`).
-- `/after-scan` shows dummy media tabs (`2D`, `3D`).
+- Product details + actions appear in-scan only when marker is locked.
+- `2D` and `3D` tabs switch correctly inside the in-scan panel.
 
 ## Marker gate
 - Marker reference exists at `public/assets/markers/mvp/macbook-air/reference.png`.
 - Marker target exists at `public/assets/markers/mvp/macbook-air/target.mind`.
-- Tracking lock is validated using the same poster image as marker source.
+- Tracking lock is validated against the same marker source image.
 
 ## Mobile quality gate (strict)
 - Passes on latest Chrome Android.
@@ -21,6 +21,6 @@
 - Runtime transitions visible: requesting_camera → searching → found/lost/error.
 
 ## Deploy gate
-- Vercel preview URL available over HTTPS.
-- SPA rewrites work for `/scan` and `/after-scan`.
-- Known limits are communicated in `docs/known-limitations.md`.
+- HTTPS preview URL is available for mobile QA.
+- SPA rewrites work for `/scan`.
+- Known limitations are communicated in `docs/known-limitations.md`.

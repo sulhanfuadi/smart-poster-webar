@@ -11,10 +11,8 @@ const mustExist = [
   'src/content/products/shared.ts',
   'src/state/ScanSessionContext.tsx',
   'src/ar/mindarRuntime.ts',
-  'src/pages/IntroPage.tsx',
   'src/pages/ScanPage.tsx',
-  'src/pages/AfterScanPage.tsx',
-  'src/components/AfterScanCTA.tsx',
+  'src/components/ScanActionPanel.tsx',
   'scripts/generate-mvp-marker.mjs',
   'public/assets/markers/mvp/macbook-air/reference.png',
   'public/assets/markers/mvp/macbook-air/target.mind',
@@ -33,10 +31,15 @@ if (missing.length) {
 }
 
 const appText = fs.readFileSync(path.join(root, 'src/App.tsx'), 'utf8');
-const appSnippets = ['routes.intro', 'routes.scan', 'routes.afterScan', '<Routes>', '<Route'];
+const appSnippets = ['routes.root', 'routes.scan', '<Routes>', '<Route'];
 const missingApp = appSnippets.filter((snippet) => !appText.includes(snippet));
 if (missingApp.length) {
   console.error('App route snippets missing:\n' + missingApp.join('\n'));
+  process.exit(1);
+}
+
+if (appText.includes('routes.afterScan')) {
+  console.error('App routes still reference after-scan path in scan-first mode');
   process.exit(1);
 }
 
@@ -49,7 +52,7 @@ if (missingRuntime.length) {
 }
 
 const contentText = fs.readFileSync(path.join(root, 'src/content/appContent.ts'), 'utf8');
-const contentSnippets = ['mvpProduct', 'appleMacbook', 'MacBook Air Single-Marker AR MVP'];
+const contentSnippets = ['mvpProduct', 'appleMacbook', 'Apple Product Scan-First AR MVP'];
 const missingContent = contentSnippets.filter((snippet) => !contentText.includes(snippet));
 if (missingContent.length) {
   console.error('MVP content snippets missing:\n' + missingContent.join('\n'));
@@ -57,23 +60,23 @@ if (missingContent.length) {
 }
 
 const scanPageText = fs.readFileSync(path.join(root, 'src/pages/ScanPage.tsx'), 'utf8');
-const scanPageSnippets = ['mvpProduct.scanTarget.mindTargetUrl', 'navigate(routes.afterScan)', 'to={routes.intro}'];
+const scanPageSnippets = ['mvpProduct.scanTarget.mindTargetUrl', 'runtime.stage === \'found\'', 'ScanActionPanel'];
 const missingScanPage = scanPageSnippets.filter((snippet) => !scanPageText.includes(snippet));
 if (missingScanPage.length) {
   console.error('Scan page MVP snippets missing:\n' + missingScanPage.join('\n'));
   process.exit(1);
 }
 
-if (scanPageText.includes('useSearchParams') || scanPageText.includes('getActiveProduct')) {
+if (scanPageText.includes('afterScan') || scanPageText.includes('useSearchParams') || scanPageText.includes('getActiveProduct')) {
   console.error('Scan page must not include legacy product-query logic in single-marker MVP mode');
   process.exit(1);
 }
 
-const afterScanCtaText = fs.readFileSync(path.join(root, 'src/components/AfterScanCTA.tsx'), 'utf8');
-const ctaSnippets = ['product.actions.map', 'product.mediaPreviews.map', 'actionsHeading', 'mediaHeading'];
-const missingCta = ctaSnippets.filter((snippet) => !afterScanCtaText.includes(snippet));
+const actionPanelText = fs.readFileSync(path.join(root, 'src/components/ScanActionPanel.tsx'), 'utf8');
+const ctaSnippets = ['product.actions.map', 'product.mediaPreviews.map', 'scanPanel.actionsHeading', 'scanPanel.mediaHeading'];
+const missingCta = ctaSnippets.filter((snippet) => !actionPanelText.includes(snippet));
 if (missingCta.length) {
-  console.error('After-scan action hub snippets missing:\n' + missingCta.join('\n'));
+  console.error('In-scan action panel snippets missing:\n' + missingCta.join('\n'));
   process.exit(1);
 }
 
@@ -101,4 +104,4 @@ if (!vercelText.includes('rewrites')) {
   process.exit(1);
 }
 
-console.log('Smoke check passed: single-marker MacBook Air MVP flow is present.');
+console.log('Smoke check passed: scan-first single-marker Apple-style MVP flow is present.');

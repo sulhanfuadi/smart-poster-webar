@@ -1,26 +1,25 @@
-# Mobile QA Matrix (Single-Marker MVP)
+# Mobile QA Matrix (Scan-First Single-Marker MVP)
 
 ## Devices and browsers
 - Chrome Android (latest)
 - Safari iPhone (latest)
 
 ## Mandatory test paths
-1. `/`
+1. `/` (must redirect to `/scan`)
 2. `/scan`
-3. `/after-scan`
 
 ## Scenario checklist
-- Intro CTA opens `/scan` without reload.
+- Redirect from `/` to `/scan` works without breaking camera flow.
 - Camera permission prompt appears and can be granted.
 - Marker locks when scanning `public/assets/markers/mvp/macbook-air/reference.png`.
-- Runtime state changes are visible (`searching`, `found`, `lost`, `error`).
-- Continue button opens `/after-scan`.
-- `Detail`, `Contact`, `Buy` links open expected targets.
-- `2D` and `3D` tabs switch correctly and render panel content.
-- Restart returns to `/` and resets session state.
+- Runtime state transitions are visible (`searching`, `found`, `lost`, `error`).
+- In-scan product panel appears only when marker is locked.
+- `Details`, `Contact`, `Buy` links open expected targets.
+- `2D` and `3D` tabs switch correctly and render content.
+- Retry and fallback camera controls work when AR runtime fails.
 
 ## Fail criteria
-- AR viewport not full-screen on mobile.
-- Controls overlap/notch clipping.
+- AR viewport is not full-screen on mobile.
+- Controls overlap with notch/safe-area.
 - Marker lock never occurs under normal lighting.
-- Action buttons open wrong links or dead links.
+- Action links are broken or point to wrong targets.

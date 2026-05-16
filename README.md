@@ -1,19 +1,18 @@
-# MacBook Air Single-Marker WebAR MVP
+# Apple Product Scan-First WebAR MVP
 
-A focused AR-first WebAR MVP for academic demo use, built with React + TypeScript + MindAR. This version uses one MacBook Air poster image as the only marker source.
+A focused single-marker WebAR MVP using React + TypeScript + MindAR.  
+This revision is scan-first: all product details and conversion actions live directly inside the scan page.
 
 ## Core architecture
 - Vite + React + TypeScript
-- React Router (`/`, `/scan`, `/after-scan`)
-- Tailwind CSS
+- React Router (`/` redirects to `/scan`)
+- Tailwind CSS with Apple-inspired design tokens
 - MindAR + Three.js image-tracking runtime
 
-## Fixed route flow
-- `/` intro card (single product)
-- `/scan` full-screen AR scan session
-- `/after-scan` action hub + dummy 2D/3D tabs
-
-No query-product routing is used in MVP mode.
+## Route behavior
+- `/` redirects to `/scan`
+- `/scan` is the primary and only user-facing flow
+- no after-scan page UX
 
 ## Single marker contract (source of truth)
 - Marker reference image:
@@ -26,20 +25,23 @@ No query-product routing is used in MVP mode.
 npm run marker:generate
 ```
 
-`markers:generate` remains as backward-compatible alias to the same MVP script.
+`markers:generate` remains as a backward-compatible alias.
 
-## Conversion actions (real links)
-After scan, app provides three direct actions:
-- Detail → `https://www.apple.com/macbook-air/`
+## In-scan conversion surface
+When marker is locked, the scan page reveals:
+- quick product details panel
+- `Details`, `Contact`, `Buy` actions
+- `2D` / `3D` dummy preview tabs
+
+Current action links:
+- Details → `https://www.apple.com/macbook-air/`
 - Contact → WhatsApp link with prefilled message
 - Buy → `https://www.apple.com/shop/buy-mac/macbook-air`
 
-## 2D/3D dummy mode
-- `2D` tab: static information card placeholder
-- `3D` tab: placeholder panel describing current 3D integration state
-- Real GLB remains optional at:
+## 3D model placement (optional)
+- Optional GLB path:
   - `public/assets/models/apple-macbook/model.glb`
-- If GLB is missing or invalid, runtime falls back safely to default mesh.
+- If missing/invalid, runtime safely falls back to default mesh.
 
 ## Run locally
 ```bash
@@ -62,5 +64,5 @@ npm run preview
   - Safari iPhone (latest)
 
 ## MVP scope
-- Included: single-marker scan, runtime states, action hub, dummy 2D/3D panel.
+- Included: scan-first marker AR, runtime states, in-scan conversion panel, dummy 2D/3D tabs.
 - Excluded: chatbot runtime and CMS/admin tooling.
