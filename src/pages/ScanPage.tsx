@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ScanHUD } from '../components/ScanHUD';
-import { getActiveProduct, routes, toProductPath } from '../content/appContent';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMindArRuntime } from '../ar/mindarRuntime';
+import { ScanHUD } from '../components/ScanHUD';
+import { mvpProduct, routes } from '../content/appContent';
 import { useScanSession } from '../state/ScanSessionContext';
 import type { ScanStage } from '../types/app';
 
@@ -25,21 +25,8 @@ function toCameraErrorMessage(error: unknown) {
   return `Basic camera fallback failed: ${raw}`;
 }
 
-function buildFallbackNotice(reason: 'missing' | 'invalid' | null, requestedProductId: string | null, productName: string) {
-  if (reason === 'invalid' && requestedProductId) {
-    return `Product "${requestedProductId}" is not found. Using default: ${productName}.`;
-  }
-
-  if (reason === 'missing') {
-    return `No product selected in URL. Using default: ${productName}.`;
-  }
-
-  return null;
-}
-
 export function ScanPage() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const basicVideoRef = useRef<HTMLVideoElement | null>(null);
   const basicStreamRef = useRef<MediaStream | null>(null);
@@ -48,8 +35,6 @@ export function ScanPage() {
 
   const [bootNonce, setBootNonce] = useState(0);
   const [basicCameraMode, setBasicCameraMode] = useState(false);
-
-  const resolution = useMemo(() => getActiveProduct(searchParams), [searchParams]);
 
   const stopBasicCamera = useCallback(() => {
     if (basicVideoRef.current) {
@@ -162,9 +147,9 @@ export function ScanPage() {
 
   useMindArRuntime({
     containerRef,
-    imageTargetSrc: resolution.product.scanTarget.mindTargetUrl,
-    fallbackImageTargetSrc: resolution.product.scanTarget.fallbackMindTargetUrl,
-    productArModel: resolution.product.arModel,
+    imageTargetSrc: mvpProduct.scanTarget.mindTargetUrl,
+    fallbackImageTargetSrc: mvpProduct.scanTarget.fallbackMindTargetUrl,
+    productArModel: mvpProduct.arModel,
     onStage,
     onCameraGranted: setCameraGranted,
     onMarkerLocked: setMarkerLocked,
@@ -173,26 +158,22 @@ export function ScanPage() {
     bootNonce,
   });
 
-  const fallbackNotice = resolution.usedFallback
-    ? buildFallbackNotice(resolution.fallbackReason, resolution.requestedProductId, resolution.product.name)
-    : null;
-
   return (
     <div className="min-h-[100dvh] bg-apple-bg">
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-3 pb-2 pt-[max(env(safe-area-inset-top),0.75rem)]">
         <Link
-          to={toProductPath(routes.intro, resolution.productId)}
+          to={routes.intro}
           className="flex h-10 items-center justify-center rounded-full border border-apple-stroke bg-white px-4 text-sm text-apple-text"
         >
-          {resolution.product.scan.back}
+          {mvpProduct.scan.back}
         </Link>
-        <p className="text-center text-sm font-medium text-apple-muted">{resolution.product.scan.title}</p>
+        <p className="text-center text-sm font-medium text-apple-muted">{mvpProduct.scan.title}</p>
         <button
           type="button"
-          onClick={() => navigate(toProductPath(routes.afterScan, resolution.productId))}
+          onClick={() => navigate(routes.afterScan)}
           className="flex h-10 items-center justify-center rounded-full bg-apple-accent px-4 text-sm font-medium text-white"
         >
-          {resolution.product.scan.continue}
+          {mvpProduct.scan.continue}
         </button>
       </header>
 
@@ -212,10 +193,9 @@ export function ScanPage() {
         <ScanHUD
           runtime={runtime}
           isMobile={mobile}
-          runtimeMessages={resolution.product.scan.runtimeMessages}
-          desktopHint={resolution.product.intro.desktopHint}
-          guidanceText={resolution.product.scan.guidance}
-          fallbackNotice={fallbackNotice}
+          runtimeMessages={mvpProduct.scan.runtimeMessages}
+          desktopHint={mvpProduct.intro.desktopHint}
+          guidanceText={mvpProduct.scan.guidance}
         />
 
         {runtime.stage === 'error' && (

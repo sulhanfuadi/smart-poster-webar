@@ -6,36 +6,16 @@ const sampleMindTargetUrl =
 export const sampleReferenceImageUrl =
   'https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.png';
 
-export const productMarkerPaths = {
-  'apple-iphone': {
-    mindTargetUrl: '/assets/markers/products/apple-iphone/target.mind',
-    referenceImageUrl: '/assets/markers/products/apple-iphone/reference.png',
-  },
-  'apple-macbook': {
-    mindTargetUrl: '/assets/markers/products/apple-macbook/target.mind',
-    referenceImageUrl: '/assets/markers/products/apple-macbook/reference.png',
-  },
-  'apple-airpods': {
-    mindTargetUrl: '/assets/markers/products/apple-airpods/target.mind',
-    referenceImageUrl: '/assets/markers/products/apple-airpods/reference.png',
-  },
-  'apple-ipad': {
-    mindTargetUrl: '/assets/markers/products/apple-ipad/target.mind',
-    referenceImageUrl: '/assets/markers/products/apple-ipad/reference.png',
-  },
-  'apple-watch': {
-    mindTargetUrl: '/assets/markers/products/apple-watch/target.mind',
-    referenceImageUrl: '/assets/markers/products/apple-watch/reference.png',
-  },
+export const mvpMarkerPaths = {
+  mindTargetUrl: '/assets/markers/mvp/macbook-air/target.mind',
+  referenceImageUrl: '/assets/markers/mvp/macbook-air/reference.png',
 } as const;
 
-export function buildProductScanTarget(productId: keyof typeof productMarkerPaths): ScanTargetConfig {
-  const mapped = productMarkerPaths[productId];
-
+export function buildMvpScanTarget(): ScanTargetConfig {
   return {
-    mindTargetUrl: mapped.mindTargetUrl,
+    mindTargetUrl: mvpMarkerPaths.mindTargetUrl,
     fallbackMindTargetUrl: import.meta.env.VITE_MINDAR_TARGET_URL || sampleMindTargetUrl,
-    referenceImageUrl: mapped.referenceImageUrl,
+    referenceImageUrl: mvpMarkerPaths.referenceImageUrl,
   };
 }
 

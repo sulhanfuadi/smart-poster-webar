@@ -101,11 +101,3 @@ export interface ProductConfig {
   };
   hotspots: ProductHotspot[];
 }
-
-export interface ActiveProductResolution {
-  productId: string;
-  product: ProductConfig;
-  requestedProductId: string | null;
-  usedFallback: boolean;
-  fallbackReason: 'missing' | 'invalid' | null;
-}

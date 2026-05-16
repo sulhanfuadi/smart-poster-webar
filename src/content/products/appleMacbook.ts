@@ -1,5 +1,5 @@
 import type { ProductConfig } from '../../types/app';
-import { baseRuntimeMessages, buildProductScanTarget, commonAfterScanCopy, commonIntroCopy } from './shared';
+import { baseRuntimeMessages, buildMvpScanTarget, commonAfterScanCopy, commonIntroCopy } from './shared';
 
 export const appleMacbook: ProductConfig = {
   id: 'apple-macbook',
@@ -24,7 +24,7 @@ export const appleMacbook: ProductConfig = {
     title: 'Complete the MacBook handoff',
     offerLabel: 'Open MacBook Offer Page',
   },
-  scanTarget: buildProductScanTarget('apple-macbook'),
+  scanTarget: buildMvpScanTarget(),
   arModel: {
     url: '/assets/models/apple-macbook/model.glb',
     scale: [0.9, 0.9, 0.9],
