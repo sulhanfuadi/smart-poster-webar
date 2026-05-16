@@ -58,6 +58,21 @@ export interface ProductHotspot {
   y: number;
 }
 
+export interface ProductAction {
+  id: string;
+  label: string;
+  url: string;
+  style: 'primary' | 'secondary' | 'outline';
+}
+
+export interface ProductMediaPreview {
+  id: '2d' | '3d' | string;
+  label: string;
+  headline: string;
+  description: string;
+  points: string[];
+}
+
 export interface ProductIntroCopy {
   eyebrow: string;
   title: string;
@@ -82,7 +97,8 @@ export interface ProductAfterScanCopy {
   eyebrow: string;
   title: string;
   subtitle: string;
-  offerLabel: string;
+  actionsHeading: string;
+  mediaHeading: string;
   backToScan: string;
   restart: string;
 }
@@ -95,9 +111,7 @@ export interface ProductConfig {
   afterScan: ProductAfterScanCopy;
   scanTarget: ScanTargetConfig;
   arModel?: ProductArModelConfig;
-  offerCTA: {
-    url: string;
-    label: string;
-  };
+  actions: ProductAction[];
+  mediaPreviews: ProductMediaPreview[];
   hotspots: ProductHotspot[];
 }

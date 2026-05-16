@@ -3,26 +3,30 @@ import { baseRuntimeMessages, buildMvpScanTarget, commonAfterScanCopy, commonInt
 
 export const appleMacbook: ProductConfig = {
   id: 'apple-macbook',
-  name: 'Apple MacBook Demo',
+  name: 'MacBook Air MVP',
   intro: {
     ...commonIntroCopy,
-    title: 'Scan the MacBook poster. Start the demo instantly.',
-    subtitle: 'A focused AR flow for laptop product storytelling from poster to guided interaction.',
-    helperBody: 'Use HTTPS on mobile, allow camera access, and keep the marker flat in frame for stable tracking.',
-    referenceLabel: 'Open MacBook marker reference',
+    title: 'Scan this MacBook Air poster / Scan poster MacBook Air ini.',
+    subtitle:
+      'Marker-based single-image MVP for product storytelling and conversion / MVP marker-based satu gambar untuk storytelling produk dan konversi.',
+    helperBody:
+      'Use HTTPS on mobile, allow camera access, and keep the whole poster visible / Gunakan HTTPS di mobile, izinkan kamera, dan jaga seluruh poster tetap terlihat.',
+    referenceLabel: 'Open marker reference / Buka referensi marker',
   },
   scan: {
-    title: 'MacBook AR Scan Session',
-    back: 'Back',
-    continue: 'Continue',
-    fallbackHelp: 'Need fallback help?',
-    guidance: 'Point to the MacBook poster marker, reduce reflections, and hold still briefly.',
-    runtimeMessages: baseRuntimeMessages('Marker locked. Present the MacBook feature story now.'),
+    title: 'MacBook Air AR Scan / Scan AR MacBook Air',
+    back: 'Back / Kembali',
+    continue: 'Continue / Lanjut',
+    fallbackHelp: 'Need fallback help? / Butuh bantuan fallback?',
+    guidance:
+      'Point camera to the same MacBook Air poster, reduce glare, hold steady / Arahkan kamera ke poster yang sama, kurangi pantulan cahaya, tahan stabil.',
+    runtimeMessages: baseRuntimeMessages(
+      'Marker locked. Continue to detail and conversion / Marker terkunci. Lanjut ke detail dan konversi.',
+    ),
   },
   afterScan: {
     ...commonAfterScanCopy,
-    title: 'Complete the MacBook handoff',
-    offerLabel: 'Open MacBook Offer Page',
+    title: 'Conversion Handoff / Handoff Konversi',
   },
   scanTarget: buildMvpScanTarget(),
   arModel: {
@@ -31,10 +35,52 @@ export const appleMacbook: ProductConfig = {
     position: [0, 0, 0],
     rotation: [0, 0, 0],
   },
-  offerCTA: {
-    url: 'https://example.com/apple-macbook-offer',
-    label: 'Open MacBook Offer Page',
-  },
+  actions: [
+    {
+      id: 'detail',
+      label: 'Detail / Detail Produk',
+      url: 'https://www.apple.com/macbook-air/',
+      style: 'secondary',
+    },
+    {
+      id: 'contact',
+      label: 'Contact / Hubungi',
+      url: 'https://wa.me/6285291105501?text=Halo%2C%20saya%20tertarik%20dengan%20demo%20AR%20MacBook%20Air.%20Boleh%20minta%20info%20lanjutan%3F',
+      style: 'outline',
+    },
+    {
+      id: 'buy',
+      label: 'Buy / Beli',
+      url: 'https://www.apple.com/shop/buy-mac/macbook-air',
+      style: 'primary',
+    },
+  ],
+  mediaPreviews: [
+    {
+      id: '2d',
+      label: '2D',
+      headline: '2D Info Card / Kartu Info 2D',
+      description:
+        'This placeholder simulates static product information layered after scan / Placeholder ini mensimulasikan informasi produk statis setelah scan.',
+      points: [
+        'Chip: Apple Silicon class performance / Performa kelas Apple Silicon',
+        'Battery: up to 18 hours claim (marketing placeholder) / Klaim hingga 18 jam',
+        'Display: high-resolution retina class panel / Panel kelas retina resolusi tinggi',
+      ],
+    },
+    {
+      id: '3d',
+      label: '3D',
+      headline: '3D Preview Placeholder / Placeholder Pratinjau 3D',
+      description:
+        'Final 3D model can be plugged in later without changing conversion flow / Model 3D final bisa dipasang nanti tanpa ubah alur konversi.',
+      points: [
+        'Current state uses fallback mesh in AR runtime / Saat ini memakai fallback mesh',
+        'Model path remains `/assets/models/apple-macbook/model.glb` / Jalur model tetap sama',
+        'Safe for MVP demo while asset is still pending / Aman untuk demo MVP saat aset belum final',
+      ],
+    },
+  ],
   hotspots: [
     {
       id: 'chip',
